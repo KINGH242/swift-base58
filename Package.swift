@@ -15,8 +15,8 @@ let package = Package(
     dependencies: [
         // Big integer arithmetic used by the Base58 implementation
         .package(url: "https://github.com/attaswift/BigInt.git", .upToNextMinor(from: "5.3.0")),
-        // Provides CommonCrypto-compatible APIs on Linux
-        .package(url: "https://github.com/tesseract-one/UncommonCrypto.swift.git", .upToNextMinor(from: "0.2.1")),
+        // Provides Crypto compatible APIs on Linux
+        .package(url: "https://github.com/apple/swift-crypto.git", from: "3.15.1"),
     ],
     targets: [
         .target(
@@ -24,7 +24,7 @@ let package = Package(
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
                 // Only link UncommonCrypto on Linux; on Apple platforms, CommonCrypto is available.
-                .product(name: "UncommonCrypto", package: "UncommonCrypto.swift", condition: .when(platforms: [.linux]))
+                .product(name: "Crypto", package: "swift-crypto", condition: .when(platforms: [.linux])),
             ]
         ),
         .testTarget(

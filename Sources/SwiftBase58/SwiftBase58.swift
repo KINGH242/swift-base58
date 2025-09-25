@@ -1,12 +1,8 @@
-// Copyright Keefer Taylor, 2019.
-
 import BigInt
-#if canImport(CommonCrypto)
-import CommonCrypto
-#elseif canImport(UncommonCrypto)
-import UncommonCrypto
-#elseif canImport(CryptoKit)
+#if canImport(CryptoKit)
 import CryptoKit
+#elseif canImport(Crypto)
+import Crypto
 #endif
 import Foundation
 
@@ -105,17 +101,14 @@ public enum Base58 {
     /// - Parameter data: Input data to hash.
     /// - Returns: A sha256 hash of the input data.
     private static func sha256(_ data: [UInt8]) -> [UInt8] {
-        #if canImport(CommonCrypto) || canImport(UncommonCrypto)
-        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        data.withUnsafeBytes { rawBuffer in
-            _ = CC_SHA256(rawBuffer.baseAddress, CC_LONG(rawBuffer.count), &hash)
-        }
-        return hash
-        #elseif canImport(CryptoKit)
+        #if canImport(CryptoKit)
+        let digest = SHA256.hash(data: Data(data))
+        return Array(digest)
+        #elseif canImport(Crypto)
         let digest = SHA256.hash(data: Data(data))
         return Array(digest)
         #else
-        fatalError("No SHA256 implementation available on this platform.")
+        fatalError("No SHA256 implementation available on this platform. Please add CryptoKit or swift-crypto.")
         #endif
     }
 }
