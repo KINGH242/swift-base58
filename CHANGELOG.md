@@ -1,3 +1,9 @@
+## 0.1.2 (2025-09-25)
+
+### Fix
+
+- improve compatability to swift 6.0
+
 ## 0.1.1 (2025-09-25)
 
 ### Fix
